@@ -1,0 +1,49 @@
+Group-Git
+
+Tool for operating on many git repositories at once. The repositories can be
+managed by Github, Bitbucket, Gitosis or not at all. If managed uncloned
+repositories will be automatically cloned.
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+    perl Build.PL
+    ./Build
+    ./Build test
+    ./Build install
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Group::Git
+
+You can also look for information at:
+
+    RT, CPAN's request tracker
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Group-Git
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Group-Git
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Group-Git
+
+    Search CPAN
+        http://search.cpan.org/dist/Group-Git/
+
+    Source Code
+        git://github.com/ivanwills/Group-Git.git
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2013 Ivan Wills
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+

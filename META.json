@@ -1,0 +1,88 @@
+{
+   "abstract" : "Base module for group of git repository operations.",
+   "author" : [
+      "Ivan Wills <ivan.wills@gmail.com>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4001, CPAN::Meta::Converter version 2.110440",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Group-Git",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : 0,
+            "Test::NoWarnings" : 0
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.40"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Config::Any" : 0,
+            "File::chdir" : 0,
+            "IO::Prompt" : 0,
+            "JSON" : 0,
+            "Moose" : 0,
+            "Moose::Role" : 0,
+            "Net::GitHub" : 0,
+            "Path::Class" : 0,
+            "WWW::Mechanize" : 0,
+            "perl" : "5.006",
+            "version" : 0
+         }
+      }
+   },
+   "provides" : {
+      "Group::Git" : {
+         "file" : "lib/Group/Git.pm",
+         "version" : "v0.0.1"
+      },
+      "Group::Git::Bitbucket" : {
+         "file" : "lib/Group/Git/Bitbucket.pm",
+         "version" : "v0.0.1"
+      },
+      "Group::Git::Cmd::Branch" : {
+         "file" : "lib/Group/Git/Cmd/Branch.pm",
+         "version" : "v0.0.1"
+      },
+      "Group::Git::Cmd::Pull" : {
+         "file" : "lib/Group/Git/Cmd/Pull.pm",
+         "version" : "v0.0.1"
+      },
+      "Group::Git::Github" : {
+         "file" : "lib/Group/Git/Github.pm",
+         "version" : "v0.0.1"
+      },
+      "Group::Git::Gitosis" : {
+         "file" : "lib/Group/Git/Gitosis.pm",
+         "version" : "v0.0.1"
+      },
+      "Group::Git::Repo" : {
+         "file" : "lib/Group/Git/Repo.pm",
+         "version" : "v0.0.1"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Group::Git"
+      },
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/ivanwills/Group-Git.git"
+      }
+   },
+   "version" : "v0.0.1"
+}

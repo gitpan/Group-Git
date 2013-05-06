@@ -1,0 +1,168 @@
+#!/usr/bin/perl
+
+# Created on: 2013-05-04 16:16:56
+# Create by:  Ivan Wills
+# $Id$
+# $Revision$, $HeadURL$, $Date$
+# $Revision$, $Source$, $Date$
+
+use strict;
+use warnings;
+use version;
+use Getopt::Long;
+use Pod::Usage;
+use Data::Dumper qw/Dumper/;
+use English qw/ -no_match_vars /;
+use FindBin qw/$Bin/;
+use Path::Class;
+use Group::Git;
+use Config::Any;
+
+our $VERSION = version->new('0.0.1');
+my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
+
+my %option = (
+);
+
+if ( !@ARGV ) {
+    pod2usage( -verbose => 1 );
+}
+
+main();
+exit 0;
+
+sub main {
+
+    Getopt::Long::Configure('bundling');
+    GetOptions(
+        \%option,
+        'local|l!',
+        'test|t!',
+        'verbose|v+',
+        'man',
+        'help',
+        'VERSION!',
+    ) or pod2usage(2);
+
+    if ( $option{'VERSION'} ) {
+        print "$name Version = $VERSION\n";
+        exit 1;
+    }
+    elsif ( $option{'man'} ) {
+        pod2usage( -verbose => 2 );
+    }
+    elsif ( $option{'help'} ) {
+        pod2usage( -verbose => 1 );
+    }
+
+    # do stuff here
+    my $conf = Config::Any->load_stems({
+        stems   => [ qw/group group-git/ ],
+        use_ext => 1,
+    });
+    $conf = {
+        map {
+            %$_
+        }
+        map {
+            values $_
+        }
+        @{$conf}
+    };
+
+    my $module = $conf->{type} && !$option{local} ? 'Group::Git::' . ucfirst $conf->{type} : 'Group::Git';
+    my $file   = "$module.pm";
+    $file =~ s{::}{/}g;
+    require $file;
+    my $group = $module->new(
+        %option,
+        conf => $conf,
+    );
+
+    my $action = shift @ARGV;
+    $group->$action() if $action;
+
+    return;
+}
+
+__DATA__
+
+=head1 NAME
+
+group-git - Perform operations over many git repositories at once
+
+=head1 VERSION
+
+This documentation refers to group-git version 0.1.
+
+=head1 SYNOPSIS
+
+   group-git [option] (git-command) -- [args]
+
+ OPTIONS:
+  -l --local    Ignore any management type and just look at what is checked out
+                Only useful if you have a group-git.yml file defining Github,
+                Bitbucked or Gitosis types.
+
+  -v --verbose  Show more detailed option
+     --version  Prints the version information
+     --help     Prints this help information
+     --man      Prints the full documentation for group-git
+
+  eg
+   group-git log -- -n 1
+   group-git --local status
+   group-git --verbose grep 'where is it'
+
+=head1 DESCRIPTION
+
+Run any git command over all repositories in the current directory. If you
+have a config file set up in the current directory (group-git.yml or some
+other suffix group-git file supported by L<Config::Any>) some extra functionality
+becomes available in particular both pull and update will clone any missing
+repositories.
+
+ eg group-git.yml
+ ---
+ # Type may be any of Github, Bitbucket or Gitosis
+ type: Github
+ # if username or password are missing they will be prompted for
+ username: joeblogs@gmail.com
+ password: securepass
+ # Gitosis uses it's git url which needs to be defined or will be prompted for
+ #gitosis: gituser@gitosis.server.com:gitosis-admin.git
+
+=head1 SUBROUTINES/METHODS
+
+=head1 DIAGNOSTICS
+
+=head1 CONFIGURATION AND ENVIRONMENT
+
+=head1 DEPENDENCIES
+
+=head1 INCOMPATIBILITIES
+
+=head1 BUGS AND LIMITATIONS
+
+There are no known bugs in this module.
+
+Please report problems to Ivan Wills (ivan.wills@gmail.com).
+
+Patches are welcome.
+
+=head1 AUTHOR
+
+Ivan Wills - (ivan.wills@gmail.com)
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2013 Ivan Wills (14 Mullion Close, Hornsby Heights, NSW Australia 2077).
+All rights reserved.
+
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself. See L<perlartistic>.  This program is
+distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+
+=cut
