@@ -4,7 +4,7 @@
       "Ivan Wills <ivan.wills@gmail.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4001, CPAN::Meta::Converter version 2.110440",
+   "generated_by" : "Module::Build version 0.4002, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -16,59 +16,59 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::More" : 0,
-            "Test::NoWarnings" : 0
+            "Test::More" : "0",
+            "Test::NoWarnings" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.40"
+            "Module::Build" : "0.38"
          }
       },
       "runtime" : {
          "requires" : {
-            "Config::Any" : 0,
-            "File::chdir" : 0,
-            "IO::Prompt" : 0,
-            "JSON" : 0,
-            "Moose" : 0,
-            "Moose::Role" : 0,
-            "Net::GitHub" : 0,
-            "Path::Class" : 0,
-            "WWW::Mechanize" : 0,
+            "Config::Any" : "0",
+            "File::chdir" : "0",
+            "IO::Prompt" : "0",
+            "JSON" : "0",
+            "Moose" : "0",
+            "Moose::Role" : "0",
+            "Net::GitHub" : "0",
+            "Path::Class" : "0",
+            "WWW::Mechanize" : "0",
             "perl" : "5.006",
-            "version" : 0
+            "version" : "0"
          }
       }
    },
    "provides" : {
       "Group::Git" : {
          "file" : "lib/Group/Git.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Group::Git::Bitbucket" : {
          "file" : "lib/Group/Git/Bitbucket.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Group::Git::Cmd::Branch" : {
          "file" : "lib/Group/Git/Cmd/Branch.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Group::Git::Cmd::Pull" : {
          "file" : "lib/Group/Git/Cmd/Pull.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Group::Git::Github" : {
          "file" : "lib/Group/Git/Github.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Group::Git::Gitosis" : {
          "file" : "lib/Group/Git/Gitosis.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       },
       "Group::Git::Repo" : {
          "file" : "lib/Group/Git/Repo.pm",
-         "version" : "v0.0.1"
+         "version" : "v0.0.2"
       }
    },
    "release_status" : "stable",
@@ -80,9 +80,8 @@
          "http://dev.perl.org/licenses/"
       ],
       "repository" : {
-         "type" : "git",
          "url" : "git://github.com/ivanwills/Group-Git.git"
       }
    },
-   "version" : "v0.0.1"
+   "version" : "v0.0.2"
 }
