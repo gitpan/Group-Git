@@ -13,37 +13,36 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 
-our $VERSION     = version->new('0.0.2');
+our $VERSION     = version->new('0.0.3');
 
 requires 'repos';
 requires 'verbose';
 requires 'test';
 
 sub branch {
-    my ($self) = @_;
+    my ($self, $name) = @_;
+    return unless -d $name;
 
-    for my $name ( sort keys %{ $self->repos } ) {
-        my $repo = $self->repos->{$name};
+    my $repo = $self->repos->{$name};
 
-        if ( -d $name ) {
-            local $CWD = $name;
-            my $cmd = "git branch -a";
-            $cmd .= " | grep " . join ' ', @ARGV if @ARGV;
-            print  "$cmd\n" if $self->verbose || $self->test;
-            if ( !$self->test ) {
-                if ( @ARGV ) {
-                    my $out = `$cmd`;
-                    if ( $out !~ /^\s*$/xms ) {
-                        print "$name\n$out";
-                    }
-                }
-                else {
-                    print "$name\n";
-                    system $cmd if !$self->test;
-                }
+    local $CWD = $name;
+    my $cmd = "git branch -a";
+    $cmd .= " | grep " . join ' ', @ARGV if @ARGV;
+    print  "$cmd\n" if $self->verbose || $self->test;
+    if ( !$self->test ) {
+        if ( @ARGV ) {
+            my $out = `$cmd`;
+            if ( $out !~ /^\s*$/xms ) {
+                print "$name\n$out";
             }
         }
+        else {
+            print "$name\n";
+            system $cmd if !$self->test;
+        }
     }
+
+    return;
 }
 
 1;
@@ -56,7 +55,7 @@ Group::Git::Cmd::Branch - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Branch version 0.0.2.
+This documentation refers to Group::Git::Cmd::Branch version 0.0.3.
 
 
 =head1 SYNOPSIS

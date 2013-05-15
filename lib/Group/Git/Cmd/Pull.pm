@@ -13,26 +13,26 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 
-our $VERSION     = version->new('0.0.2');
+our $VERSION     = version->new('0.0.3');
 
 requires 'repos';
 
-sub update { $_[0]->pull('update') }
+sub update { shift->pull($_[0], 'update') }
 sub pull {
-    my ($self, $type) = @_;
+    my ($self, $name, $type) = @_;
     $type ||= 'pull';
 
-    for my $name (sort keys %{ $self->repos }) {
-        my $repo = $self->repos->{$name};
+    my $repo = $self->repos->{$name};
 
-        if ( -d $name ) {
-            local $CWD = $name;
-            system 'git', $type, $repo->git;
-        }
-        else {
-            system 'git', 'clone', $repo->git;
-        }
+    if ( -d $name ) {
+        local $CWD = $name;
+        system 'git', $type, $repo->git;
     }
+    else {
+        system 'git', 'clone', $repo->git;
+    }
+
+    return;
 }
 
 1;
@@ -45,7 +45,7 @@ Group::Git::Cmd::Pull - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Pull version 0.0.2.
+This documentation refers to Group::Git::Cmd::Pull version 0.0.3.
 
 
 =head1 SYNOPSIS

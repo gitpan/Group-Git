@@ -15,7 +15,7 @@ use IO::Prompt qw/prompt/;
 use JSON qw/decode_json/;
 use WWW::Mechanize;
 
-our $VERSION     = version->new('0.0.2');
+our $VERSION     = version->new('0.0.3');
 
 extends 'Group::Git';
 
@@ -27,7 +27,7 @@ sub _httpenc {
 
 sub _repos {
     my ($self) = @_;
-    my %repos;
+    my %repos = %{ $self->SUPER::_repos() };
 
     my ($conf) = $self->conf;
     #EG curl --user buserbb:2934dfad https://api.bitbucket.org/1.0/user/repositories
@@ -63,7 +63,7 @@ Group::Git::Bitbucket - Adds reading all repositories you have access to on bitb
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Bitbucket version 0.0.2.
+This documentation refers to Group::Git::Bitbucket version 0.0.3.
 
 =head1 SYNOPSIS
 

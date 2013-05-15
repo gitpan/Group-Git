@@ -14,7 +14,7 @@ use English qw/ -no_match_vars /;
 use Path::Class;
 use File::chdir;
 
-our $VERSION     = version->new('0.0.2');
+our $VERSION     = version->new('0.0.3');
 
 extends 'Group::Git';
 
@@ -47,7 +47,7 @@ sub _repos {
     my $base = $self->conf->{gitosis};
     $base =~ s{([:/]).*?$}{$1};
 
-    my %repos;
+    my %repos = %{ $self->SUPER::_repos() };
     for my $group ( keys %$data ) {
         for my $sub_group ( keys %{ $data->{$group} } ) {
             for my $type (qw/readonly writable/) {
@@ -76,7 +76,7 @@ Group::Git::Gitosis - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Gitosis version 0.0.2.
+This documentation refers to Group::Git::Gitosis version 0.0.3.
 
 
 =head1 SYNOPSIS

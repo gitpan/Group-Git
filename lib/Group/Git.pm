@@ -15,7 +15,7 @@ use Path::Class;
 use File::chdir;
 use Group::Git::Repo;
 
-our $VERSION     = version->new('0.0.2');
+our $VERSION     = version->new('0.0.3');
 our $AUTOLOAD;
 
 has conf => (
@@ -66,7 +66,7 @@ sub _repos {
 
         $repos{ $config->parent->parent->basename } = Group::Git::Repo->new(
             name => $config->parent->parent->basename,
-            url  => $url,
+            git  => $url,
         );
     }
 
@@ -74,14 +74,13 @@ sub _repos {
 }
 
 sub cmd {
-    my ($self, $command) = @_;
+    my ($self, $command, $project) = @_;
+    return unless -d $project;
 
-    for my $project ( keys %{ $self->repos } ) {
-        next if !-d $project;
-        print "\n$project\n" if $self->verbose;
-        local $CWD = $project;
-        system 'git', $command, @ARGV;
-    }
+    local $CWD = $project;
+    system 'git', $command, @ARGV;
+
+    return;
 }
 
 sub AUTOLOAD {
@@ -98,7 +97,7 @@ sub AUTOLOAD {
     # get the function name sans package name
     my ($method) = $AUTOLOAD =~ /::([^:]+)$/;
 
-    return $self->cmd($method);
+    return $self->cmd($method, @_);
 }
 
 1;
@@ -111,7 +110,7 @@ Group::Git - Base module for group of git repository operations.
 
 =head1 VERSION
 
-This documentation refers to Group::Git version 0.0.2.
+This documentation refers to Group::Git version 0.0.3.
 
 =head1 SYNOPSIS
 
