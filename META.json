@@ -45,31 +45,31 @@
    "provides" : {
       "Group::Git" : {
          "file" : "lib/Group/Git.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       },
       "Group::Git::Bitbucket" : {
          "file" : "lib/Group/Git/Bitbucket.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       },
       "Group::Git::Cmd::Branch" : {
          "file" : "lib/Group/Git/Cmd/Branch.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       },
       "Group::Git::Cmd::Pull" : {
          "file" : "lib/Group/Git/Cmd/Pull.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       },
       "Group::Git::Github" : {
          "file" : "lib/Group/Git/Github.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       },
       "Group::Git::Gitosis" : {
          "file" : "lib/Group/Git/Gitosis.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       },
       "Group::Git::Repo" : {
          "file" : "lib/Group/Git/Repo.pm",
-         "version" : "v0.0.4"
+         "version" : "v0.0.5"
       }
    },
    "release_status" : "stable",
@@ -84,5 +84,5 @@
          "url" : "git://github.com/ivanwills/Group-Git.git"
       }
    },
-   "version" : "v0.0.4"
+   "version" : "v0.0.5"
 }
