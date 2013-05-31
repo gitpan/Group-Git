@@ -22,7 +22,8 @@ WriteMakefile
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [
-                   'bin/group-git'
+                   'bin/group-git',
+                   'bin/group-git~'
                  ],
   'PL_FILES' => {}
 )

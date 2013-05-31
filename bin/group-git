@@ -18,7 +18,7 @@ use Path::Class;
 use Group::Git;
 use Config::Any;
 
-our $VERSION = version->new('0.0.5');
+our $VERSION = version->new('0.1.0');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 
 
@@ -70,17 +70,25 @@ sub main {
         conf => $conf,
     );
 
-    my $action = $opt->cmd;
+    my $action = $opt->cmd || ( warn "No command specified!\n" && pod2usage( -verbose => 1 ) );
     my $skip   = $opt->opt->skip;
     my $match  = $opt->opt->match;
+    my %exclude = map { $_ => 1 } @{ $conf->{exclude} || [] };
+    my %include = map { $_ => 1 } @{ $conf->{include} || [] };
 
     for my $project ( sort {lc $a cmp lc $b} keys %{ $group->repos } ) {
         next if $skip  && $project =~ /$skip/;
         next if $match && $project !~ /$match/;
+        next if $exclude{$project};
+        next if %include && !$include{$project};
 
-        print "\n$project\n" unless $opt->opt->quiet;
-        $group->$action($project) if $action;
-        print "-- $project --\n" if $opt->opt->verbose;
+        my $out = $group->$action($project);
+
+        if ($out) {
+            print "\n$project\n" unless $opt->opt->quiet;
+            print $out;
+            print "-- $project --\n" if $opt->opt->verbose;
+        }
     }
 
     return;
@@ -94,7 +102,7 @@ group-git - Perform operations over many git repositories at once
 
 =head1 VERSION
 
-This documentation refers to group-git version 0.0.5.
+This documentation refers to group-git version 0.1.0.
 
 =head1 SYNOPSIS
 
@@ -128,7 +136,7 @@ Run any git command over all repositories in the current directory.
 
 If you have a config file set up in the current directory (group-git.yml or some
 other suffix group-git file supported by L<Config::Any>) extra functionality
-becomes available if you use GitHub, Bitbucket or Gitosis as your repository
+becomes available if you use Github, Bitbucket or Gitosis as your repository
 remote store. The config file will be read to supply the appropriate user
 credentials or in the case of gitosis the admin project location.
 
@@ -139,11 +147,27 @@ clone any repository that are not currently checked out in the current directory
  ---
  # Type may be any of Github, Bitbucket or Gitosis
  type: Github
+ #type: Bitbucket
+ #type: Gitosis
+
  # if username or password are missing they will be prompted for
- username: joeblogs@gmail.com
+ username: joeblogs@example.com
  password: securepass
+
  # Gitosis uses it's git url which needs to be defined or will be prompted for
  #gitosis: gituser@gitosis.server.com:gitosis-admin.git
+
+ # Exclude a git project
+ #exluce:
+ #  - project_not_to_be_managed
+ #  - ...
+
+ # Include only these projects (if mentioned only projects listed will be
+ # processed any others found will be ignored)
+ #include:
+ #  - project_of_interest_1
+ #  - project_of_interest_2
+ #  - ...
 
 For Github and Bitbucket if username or password are missing you will be
 prompted to enter the details.
