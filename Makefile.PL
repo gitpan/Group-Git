@@ -15,6 +15,7 @@ WriteMakefile
                    'Moose::Role' => 0,
                    'Net::GitHub' => 0,
                    'Path::Class' => 0,
+                   'Term::ANSIColor' => 0,
                    'Test::More' => 0,
                    'Test::NoWarnings' => 0,
                    'WWW::Mechanize' => 0,
@@ -22,8 +23,7 @@ WriteMakefile
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [
-                   'bin/group-git',
-                   'bin/group-git~'
+                   'bin/group-git'
                  ],
   'PL_FILES' => {}
 )

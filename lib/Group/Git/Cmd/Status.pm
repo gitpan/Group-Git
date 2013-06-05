@@ -1,6 +1,6 @@
-package Group::Git::Cmd::Branch;
+package Group::Git::Cmd::Status;
 
-# Created on: 2013-05-06 21:57:14
+# Created on: 2013-05-06 21:57:07
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -17,31 +17,22 @@ our $VERSION     = version->new('0.1.1');
 
 requires 'repos';
 requires 'verbose';
-requires 'test';
 
-sub branch {
+sub status {
     my ($self, $name) = @_;
-    return unless -d $name;
 
     my $repo = $self->repos->{$name};
+    my $cmd;
 
     local $CWD = $name;
-    my $cmd = "git branch -a";
-    $cmd .= " | grep " . join ' ', @ARGV if @ARGV;
-    print  "$cmd\n" if $self->verbose || $self->test;
-    if ( !$self->test ) {
-        if ( @ARGV ) {
-            my $out = `$cmd`;
-            if ( $out !~ /^\s*$/xms ) {
-                return $out;
-            }
-        }
-        else {
-            return `$cmd` if !$self->test;
-        }
-    }
+    $cmd = join ' ', 'git', 'status', @ARGV;
+    my $out = `$cmd`;
 
-    return;
+    return $out if $self->verbose;
+
+    return if $out =~ /nothing \s+ to \s+ commit/xms;
+
+    return $out;
 }
 
 1;
@@ -50,16 +41,16 @@ __END__
 
 =head1 NAME
 
-Group::Git::Cmd::Branch - <One-line description of module's purpose>
+Group::Git::Cmd::Status - Runs git status on a git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Branch version 0.1.1.
+This documentation refers to Group::Git::Cmd::Status version 0.1.1.
 
 
 =head1 SYNOPSIS
 
-   use Group::Git::Cmd::Branch;
+   use Group::Git::Cmd::Status;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -72,14 +63,14 @@ This documentation refers to Group::Git::Cmd::Branch version 0.1.1.
 
 =over 4
 
-=item C<branch ()>
+=item C<status ()>
 
-Runs a git branch -a over each repository and if other arguments are supplied
-the branch is pipped through grep with the other arguments
+Runs git status on each directory if the status message includes:
 
- eg $ group-git branch feature
+ "nothing to commit"
 
-will return each repository that has that C<feature> branch
+The status is suppressed to keep the output clean. This can be overridden
+if verbose is set.
 
 =back
 
