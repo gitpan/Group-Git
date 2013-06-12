@@ -15,7 +15,7 @@ use Path::Class;
 use File::chdir;
 use Group::Git::Repo;
 
-our $VERSION     = version->new('0.1.2');
+our $VERSION     = version->new('0.1.3');
 our $AUTOLOAD;
 
 has conf => (
@@ -45,11 +45,11 @@ has test => (
 my %modules;
 for my $dir (@INC) {
     next if !-d "$dir/Group/Git/Cmd";
-    my @commands = glob "$dir/Group/Git/Cmd/*.pm";
+    local $CWD = $dir;
+    my @commands = glob "Group/Git/Cmd/*.pm";
 
     for my $command (@commands) {
         my $module = $command;
-        $module =~ s{$dir/}{};
         $module =~ s{/}{::}g;
         $module =~ s{[.]pm$}{};
         if ( !$modules{$module}++ ) {
@@ -133,7 +133,7 @@ Group::Git - Base module for group of git repository operations.
 
 =head1 VERSION
 
-This documentation refers to Group::Git version 0.1.2.
+This documentation refers to Group::Git version 0.1.3.
 
 =head1 SYNOPSIS
 
