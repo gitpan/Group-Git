@@ -13,9 +13,10 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 
-our $VERSION     = version->new('0.1.3');
+our $VERSION     = version->new('0.1.4');
 
 requires 'repos';
+requires 'verbose';
 
 sub update { shift->pull($_[0], 'update') }
 sub pull {
@@ -26,7 +27,10 @@ sub pull {
     my $cmd;
     my $dir;
 
-    if ( -d $name ) {
+    if ( !$repo->git ) {
+        return;
+    }
+    elsif ( -d $name ) {
         $dir = $name;
         $cmd = join ' ', 'git', map { $self->shell_quote } $type, @ARGV;
     }
@@ -49,7 +53,7 @@ Group::Git::Cmd::Pull - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Pull version 0.1.3.
+This documentation refers to Group::Git::Cmd::Pull version 0.1.4.
 
 
 =head1 SYNOPSIS

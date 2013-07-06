@@ -13,7 +13,7 @@ WriteMakefile
                    'JSON' => 0,
                    'Moose' => 0,
                    'Moose::Role' => 0,
-                   'Net::GitHub' => 0,
+                   'Net::GitHub' => '0.52',
                    'Path::Class' => 0,
                    'Term::ANSIColor' => 0,
                    'Test::More' => 0,
