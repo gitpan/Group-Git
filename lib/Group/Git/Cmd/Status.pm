@@ -13,13 +13,14 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 
-our $VERSION     = version->new('0.1.4');
+our $VERSION     = version->new('0.1.5');
 
 requires 'repos';
 requires 'verbose';
 
 sub status {
     my ($self, $name) = @_;
+    return unless -d $name;
 
     my $repo = $self->repos->{$name};
     my $cmd;
@@ -45,7 +46,7 @@ Group::Git::Cmd::Status - Runs git status on a git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Status version 0.1.4.
+This documentation refers to Group::Git::Cmd::Status version 0.1.5.
 
 
 =head1 SYNOPSIS

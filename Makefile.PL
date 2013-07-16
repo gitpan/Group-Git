@@ -8,7 +8,7 @@ WriteMakefile
   'PREREQ_PM' => {
                    'Config::Any' => 0,
                    'File::chdir' => 0,
-                   'Getopt::Alt' => '0.001000',
+                   'Getopt::Alt' => '0.001001',
                    'IO::Prompt' => 0,
                    'JSON' => 0,
                    'Moose' => 0,
