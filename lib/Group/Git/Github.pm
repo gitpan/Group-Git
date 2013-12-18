@@ -14,7 +14,7 @@ use English qw/ -no_match_vars /;
 use Net::GitHub;
 use Path::Class;
 
-our $VERSION     = version->new('0.1.5');
+our $VERSION     = version->new('0.2.0');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -39,9 +39,17 @@ sub _repos {
 
     while (@list) {
         for my $repo (@list) {
+            my $url = $repo->{git_url};
+            # convert urls of the form:
+            #   git://github.com/ivanwills/meteor.git
+            # to
+            #   git@github.com:ivanwills/meteor.git
+            # as git doesn't like the form that github uses
+            $url =~ s{git://github.com/([^/]+)}{git\@github.com:$1};
+
             $repos{ $repo->{name} } = Group::Git::Repo->new(
                 name => dir($repo->{name}),
-                git  => $repo->{git_url},
+                git  => $url,
             );
         }
 
@@ -59,8 +67,12 @@ sub _github {
     my $conf = $self->conf;
 
     return Net::GitHub->new(
-        login => $conf->{username} ? $conf->{username} : prompt( -prompt => 'github.com username : ' ),
-        pass  => $conf->{password} ? $conf->{password} : prompt( -prompt => 'github.com password : ', -echo => '*' ),
+        $conf->{access_token}
+        ? ( access_token => $conf->{access_token} )
+        : (
+            login => $conf->{username} ? $conf->{username} : prompt( -prompt => 'github.com username : ' ),
+            pass  => $conf->{password} ? $conf->{password} : prompt( -prompt => 'github.com password : ', -echo => '*' ),
+        )
     );
 }
 
@@ -74,7 +86,7 @@ Group::Git::Github - Adds reading all repositories you have access to on github
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Github version 0.1.5.
+This documentation refers to Group::Git::Github version 0.2.0.
 
 
 =head1 SYNOPSIS
@@ -89,10 +101,41 @@ This documentation refers to Group::Git::Github version 0.1.5.
        },
    )->pull;
 
+   # Alternitavely using personal access tokens
+   # You can setup at https://github.com/settings/applications
+   Group::Git::Github->new(
+       conf => {
+           access_token => '...',
+       },
+   )->pull;
+
 =head1 DESCRIPTION
 
 Reads all repositories for the configured user (if none set user will be
 prompted to enter one as well as a password)
+
+=head2 Configuration
+
+There are three configuration parameters that are currently used
+
+=over 4
+
+=item access_token
+
+A github OAuth personal access token. If supplied then username and password
+are ignored.
+
+=item username
+
+Specify the user to login as, if not specified the user will be prompted to
+enter a username.
+
+=item password
+
+Specify the password to login with, if not specified the user will be prompted
+to enter a password.
+
+=back
 
 =head1 SUBROUTINES/METHODS
 

@@ -15,7 +15,7 @@ use Path::Class;
 use File::chdir;
 use Group::Git::Repo;
 
-our $VERSION     = version->new('0.1.5');
+our $VERSION     = version->new('0.2.0');
 our $AUTOLOAD;
 
 has conf => (
@@ -94,7 +94,7 @@ sub _repos {
 
 sub cmd {
     my ($self, $command, $project) = @_;
-    return unless -d $project;
+    return if !$project || !-d $project;
 
     local $CWD = $project;
     local @ARGV = @ARGV;
@@ -135,7 +135,7 @@ Group::Git - Base module for group of git repository operations.
 
 =head1 VERSION
 
-This documentation refers to Group::Git version 0.1.5.
+This documentation refers to Group::Git version 0.2.0.
 
 =head1 SYNOPSIS
 
@@ -156,6 +156,37 @@ namespace. This allows the creation of new command by just putting a role in tha
 namespace. Classes may extend this class to implement their own methods for
 finding repositories (eg L<Group::Git::Github>, L<Group::Git::Bitbucket> and
 L<Group::Git::Gitosis>)
+
+=head2 Group-Git vs Git Submodule
+
+It has been pointed out that something similar could be achieved using the git
+submodule command so here are some reasons for using C<Group-Git>:
+
+=over 4
+
+=item *
+
+No git repository needed to manage all the repositories in fact no configuration
+is required at all.
+
+=item *
+
+Group-Git just cares about repositories not their commits as submodule does.
+
+=item *
+
+When using one of github.com / bitbucket.com or gitosis configurations when
+new repositories are added the next C<group-git pull> will get those new
+repositories.
+
+=item *
+
+You can add your own commands to C<group-git> currently via perl modules but
+in the future in the same fashion as C<git> does (eg adding a program called
+C<group-git-command> somewhere on your path will result in you being able to
+run C<group-git command>)
+
+=back
 
 =head1 SUBROUTINES/METHODS
 

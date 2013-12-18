@@ -1,33 +1,42 @@
-package Group::Git::Repo;
+package Group::Git::Cmd::Help;
 
-# Created on: 2013-05-05 19:07:36
+# Created on: 2013-05-06 21:57:07
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use Moose;
+use Moose::Role;
 use version;
 use Carp;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use File::chdir;
+use Getopt::Alt;
 
 our $VERSION     = version->new('0.2.0');
 
-extends 'Group::Git';
+requires 'repos';
+requires 'verbose';
 
-has name => (
-    is  => 'rw',
-    isa => 'Path::Class::Dir',
+my $opt = Getopt::Alt->new(
+    { help => __PACKAGE__, },
+    [ 'quote|q!', ]
 );
-has url => (
-    is  => 'rw',
-    isa => 'Str',
-);
-has git => (
-    is  => 'rw',
-    isa => 'Str',
-);
+
+sub help_start {
+    my ($self) = @_;
+
+    if ( @ARGV ) {
+        my $cmd = shift @ARGV;
+        unshift @ARGV, $cmd, "--help";
+    }
+    else {
+        @ARGV = qw/--help/;
+    }
+
+    exec $0, @ARGV;
+}
 
 1;
 
@@ -35,16 +44,16 @@ __END__
 
 =head1 NAME
 
-Group::Git::Repo - <One-line description of module's purpose>
+Group::Git::Cmd::Help - Runs git status on a git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Repo version 0.2.0.
+This documentation refers to Group::Git::Cmd::Help version 0.2.0.
 
 
 =head1 SYNOPSIS
 
-   use Group::Git::Repo;
+   use Group::Git::Cmd::Help;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -54,6 +63,12 @@ This documentation refers to Group::Git::Repo version 0.2.0.
 =head1 DESCRIPTION
 
 =head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item C<help_start ($name)>
+
+=back
 
 =head1 DIAGNOSTICS
 

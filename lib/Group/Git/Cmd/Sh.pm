@@ -1,6 +1,6 @@
-package Group::Git::Cmd::Branch;
+package Group::Git::Cmd::Sh;
 
-# Created on: 2013-05-06 21:57:14
+# Created on: 2013-05-06 21:57:07
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -18,36 +18,31 @@ our $VERSION     = version->new('0.2.0');
 
 requires 'repos';
 requires 'verbose';
-requires 'test';
 
 my $opt = Getopt::Alt->new(
     { help => __PACKAGE__, },
     [ 'quote|q!', ]
 );
 
-sub branch {
+sub sh {
     my ($self, $name) = @_;
     return unless -d $name;
 
     my $repo = $self->repos->{$name};
+    $opt->process if !%{ $opt->opt || {} };
 
     local $CWD = $name;
-    my $cmd = "git branch -a";
-    $cmd .= " | grep " . join ' ', map { $self->shell_quote } @ARGV if @ARGV;
-    print  "$cmd\n" if $self->verbose || $self->test;
-    if ( !$self->test ) {
-        if ( @ARGV ) {
-            my $out = `$cmd`;
-            if ( $out !~ /^\s*$/xms ) {
-                return $out;
-            }
-        }
-        else {
-            return `$cmd` if !$self->test;
-        }
-    }
+    my $cmd
+        = $opt->opt->quote
+        ? join ' ', map { $self->shell_quote } @ARGV
+        : join ' ', @ARGV;
+    my $out = `$cmd`;
 
-    return;
+    return $out if $self->verbose;
+
+    return if !$out || $out =~ /\A\s*\Z/xms;
+
+    return $out;
 }
 
 1;
@@ -56,36 +51,33 @@ __END__
 
 =head1 NAME
 
-Group::Git::Cmd::Branch - Show all branches with optional grepping
+Group::Git::Cmd::Sh - Runs shell script in each git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Branch version 0.2.0.
-
+This documentation refers to Group::Git::Cmd::Sh version 0.2.0.
 
 =head1 SYNOPSIS
 
-   use Group::Git::Cmd::Branch;
+   group-get sh program ...
+   group-git sh [--quote|-q] program ...
 
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
-
+  OPTIONS:
+   -q --quote   Quote the program arguments before running saves you from
+                having to work out the next level quoting but stops you from
+                using other shell options eg piping (|).
 
 =head1 DESCRIPTION
+
+Run the program in each checked out git repository.
 
 =head1 SUBROUTINES/METHODS
 
 =over 4
 
-=item C<branch ($name)>
+=item C<sh ($name)>
 
-Runs a git branch -a over each repository and if other arguments are supplied
-the branch is pipped through grep with the other arguments
-
- eg $ group-git branch feature
-
-will return each repository that has that C<feature> branch
+Runs all the reset of the command line in each directory as a shell script.
 
 =back
 

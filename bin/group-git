@@ -22,7 +22,6 @@ use Term::ANSIColor qw/colored/;
 our $VERSION = version->new('0.1.2');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 
-
 main();
 exit 0;
 
@@ -41,22 +40,12 @@ sub main {
             'local|l!',
             'recurse|r!',
             'page|p!',
-            'test|t!',
+            'tag|t=s',
+            'test|T!',
             'verbose|v+',
             'quiet|q',
         ]
     );
-
-    if ( $opt->VERSION ) {
-        print "$name Version = $VERSION\n";
-        exit 1;
-    }
-    elsif ( $opt->man ) {
-        pod2usage( -verbose => 2 );
-    }
-    elsif ( $opt->help ) {
-        pod2usage( -verbose => 1 );
-    }
 
     # do stuff here
     my $conf = Config::Any->load_stems({
@@ -90,9 +79,13 @@ sub main {
         $outfh = $tmp if open $tmp, '|-', $ENV{PAGER} || 'less -Rx4SFX';
     }
 
-    my $action_start = $action . '_start';
-    my $action_end   = $action . '_end';
-    print {$outfh} $group->$action_start() if $group->can($action_start);
+    my $cmd_start = do_cmd( $group, $action . '_start' );
+    my $cmd_end   = do_cmd( $group, $action . '_end' );
+    my $cmd_body  = do_cmd( $group, $action, 1 );
+
+    die "Can't find group-git sub-command '$action'!\n" if !$cmd_body;
+
+    print {$outfh} $cmd_start->() if $cmd_start;
 
     for my $project ( sort sorter keys %{ $group->repos } ) {
         next if $skip  && $project =~ /$skip/;
@@ -100,7 +93,7 @@ sub main {
         next if $exclude{$project};
         next if %include && !$include{$project};
 
-        my $out = $group->$action($project);
+        my $out = $cmd_body->($project);
 
         if ($out) {
             $project = colored($project, 'blue');
@@ -110,9 +103,29 @@ sub main {
         }
     }
 
-    print {$outfh} $group->$action_end() if $group->can($action_end);
+    print {$outfh} $cmd_end->() if $cmd_end;
 
     return;
+}
+
+sub do_cmd {
+    my ($group, $cmd, $fallback) = @_;
+    if ( $group->can($cmd) ) {
+        return sub { $group->$cmd( @_ ) };
+    }
+    else {
+        for my $path ( split /[:;]/, $ENV{PATH} ) {
+            next if !-d $path;
+            my $script = "$path/group-git-$cmd";
+            next if !-x $script;
+
+            return sub { system $script, @_; }
+        }
+    }
+
+    return if !$fallback;
+
+    return sub { $group->cmd( $cmd, @_ ) };
 }
 
 sub sorter {
@@ -122,6 +135,21 @@ sub sorter {
     my $B = $b;
     $B =~ s/(\d+)/sprintf "%06d", $1/egxms;
     return lc $A cmp lc $B;
+}
+
+my $tagged;
+sub tagged {
+    my ($conf, $tag, $project) = @_;
+
+    # everything is "tagged" if none is specified
+    return 1 if !$tag;
+
+    if ( !defined $tagged ) {
+        $tagged = { map { $_ => 1 } @{ $conf->{tags}{$tag} || [] } };
+    }
+
+    # return true if the project is tagged in the config file or has a tag file
+    return $tagged->{$project} || -e "$project/.$tag.tag";
 }
 
 __DATA__
@@ -139,6 +167,7 @@ This documentation refers to group-git version 0.1.2.
    group-git [option] (git-command) -- [args]
 
  OPTIONS:
+  Filtering:
   -s --skip[=]regexp
                 Skip any project matching this regexp
   -m --match[=]regexp
@@ -146,14 +175,23 @@ This documentation refers to group-git version 0.1.2.
   -l --local    Ignore any management type and just look at what is checked out
                 Only useful if you have a group-git.yml file defining Github,
                 Bitbucked or Gitosis types.
+  -t --tag[=]str
+                Only opperate on repositories tagged with str (tags can be
+                specified in the config file see --man or with a file .[tag].tag
+                in the project directory)
+
+  Finding projects:
   -r --recurse  Recurses into subdirectories to check if they contain git
                 repositories rather than only stopping at the current level.
+
+  Output:
   -p --page     Turns on paginating out put uses $PAGER environment variable if
                 set or 'less -Rx4SFX' if not.
      --no-page  Turn off pagination.
-
   -q --quiet    Don't show project names before running git on the directory
   -v --verbose  Show more details
+
+  Other:
      --VERSION  Prints the version information
      --help     Prints this help information
      --man      Prints the full documentation for group-git
@@ -162,6 +200,7 @@ This documentation refers to group-git version 0.1.2.
    group-git log -- -n 1
    group-git --local status
    group-git --verbose grep 'where is it'
+   group-git --tag perl pull
 
 =head1 DESCRIPTION
 
@@ -189,20 +228,35 @@ clone any repository that are not currently checked out in the current directory
  username: joeblogs@example.com
  password: securepass
 
+ # for github you can specify an access token if using 2 factor auth
+ #access_token: ....
+
  # Gitosis uses it's git url which needs to be defined or will be prompted for
  #gitosis: gituser@gitosis.server.com:gitosis-admin.git
 
- # Exclude a git project
+ # Global Exclude a git project
  #exclude:
  #  - project_not_to_be_managed
  #  - ...
 
- # Include only these projects (if mentioned only projects listed will be
+ # Global Include only these projects (if mentioned only projects listed will be
  # processed any others found will be ignored)
  #include:
  #  - project_of_interest_1
  #  - project_of_interest_2
  #  - ...
+
+ # Set up tags for groups of projects so you can opperate only on that tag
+ # Tags can also be defined with the projects directory creating a file with
+ # a name of the format ".[tag].tag"
+ #  eg to tag a project as mytag create a file .mytag.tag
+ #tags:
+ #  mytag:
+ #    - project1
+ #    - project2
+ #  myothertag:
+ #    - project2
+ #    - project3
 
 For Github and Bitbucket if username or password are missing you will be
 prompted to enter the details.

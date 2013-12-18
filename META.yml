@@ -8,7 +8,7 @@ build_requires:
 configure_requires:
   Module::Build: 0.38
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4001, CPAN::Meta::Converter version 2.131560'
+generated_by: 'Module::Build version 0.4203, CPAN::Meta::Converter version 2.131560'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,28 +17,34 @@ name: Group-Git
 provides:
   Group::Git:
     file: lib/Group/Git.pm
-    version: v0.1.5
+    version: v0.2.0
   Group::Git::Bitbucket:
     file: lib/Group/Git/Bitbucket.pm
-    version: v0.1.5
+    version: v0.2.0
   Group::Git::Cmd::Branch:
     file: lib/Group/Git/Cmd/Branch.pm
-    version: v0.1.5
+    version: v0.2.0
+  Group::Git::Cmd::Help:
+    file: lib/Group/Git/Cmd/Help.pm
+    version: v0.2.0
   Group::Git::Cmd::Pull:
     file: lib/Group/Git/Cmd/Pull.pm
-    version: v0.1.5
+    version: v0.2.0
+  Group::Git::Cmd::Sh:
+    file: lib/Group/Git/Cmd/Sh.pm
+    version: v0.2.0
   Group::Git::Cmd::Status:
     file: lib/Group/Git/Cmd/Status.pm
-    version: v0.1.5
+    version: v0.2.0
   Group::Git::Github:
     file: lib/Group/Git/Github.pm
-    version: v0.1.5
+    version: v0.2.0
   Group::Git::Gitosis:
     file: lib/Group/Git/Gitosis.pm
-    version: v0.1.5
+    version: v0.2.0
   Group::Git::Repo:
     file: lib/Group/Git/Repo.pm
-    version: v0.1.5
+    version: v0.2.0
 requires:
   Config::Any: 0
   File::chdir: 0
@@ -57,4 +63,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Group::Git
   license: http://dev.perl.org/licenses/
   repository: git://github.com/ivanwills/Group-Git.git
-version: v0.1.5
+version: v0.2.0
