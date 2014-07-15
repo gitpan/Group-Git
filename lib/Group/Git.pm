@@ -15,7 +15,7 @@ use Path::Class;
 use File::chdir;
 use Group::Git::Repo;
 
-our $VERSION     = version->new('0.2.1');
+our $VERSION = version->new('0.3.0');
 our $AUTOLOAD;
 
 has conf => (
@@ -40,6 +40,11 @@ has verbose => (
 has test => (
     is  => 'rw',
     isa => 'Bool',
+);
+has runs => (
+    is      => 'rw',
+    isa     => 'Int',
+    default => 1,
 );
 
 # load all roles in the namespace Group::Git::Cmd::*
@@ -135,7 +140,7 @@ Group::Git - Base module for group of git repository operations.
 
 =head1 VERSION
 
-This documentation refers to Group::Git version 0.2.1.
+This documentation refers to Group::Git version 0.3.0.
 
 =head1 SYNOPSIS
 
