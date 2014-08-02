@@ -14,7 +14,7 @@ use English qw/ -no_match_vars /;
 use Net::GitHub;
 use Path::Class;
 
-our $VERSION = version->new('0.3.0');
+our $VERSION = version->new('0.3.1');
 
 extends 'Group::Git';
 
@@ -71,11 +71,11 @@ __END__
 
 =head1 NAME
 
-Group::Git::Github - Adds reading all repositories you have access to on github
+Group::Git::Github - Adds reading all repositories you have access to on github.com
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Github version 0.3.0.
+This documentation refers to Group::Git::Github version 0.3.1.
 
 
 =head1 SYNOPSIS
