@@ -17,40 +17,40 @@ name: Group-Git
 provides:
   Group::Git:
     file: lib/Group/Git.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Bitbucket:
     file: lib/Group/Git/Bitbucket.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Cmd::Branch:
     file: lib/Group/Git/Cmd/Branch.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Cmd::Help:
     file: lib/Group/Git/Cmd/Help.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Cmd::Pull:
     file: lib/Group/Git/Cmd/Pull.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Cmd::Sh:
     file: lib/Group/Git/Cmd/Sh.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Cmd::Status:
     file: lib/Group/Git/Cmd/Status.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Cmd::Watch:
     file: lib/Group/Git/Cmd/Watch.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Github:
     file: lib/Group/Git/Github.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Gitosis:
     file: lib/Group/Git/Gitosis.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Repo:
     file: lib/Group/Git/Repo.pm
-    version: v0.3.1
+    version: v0.3.2
   Group::Git::Stash:
     file: lib/Group/Git/Stash.pm
-    version: v0.3.1
+    version: v0.3.2
 requires:
   Config::Any: 0
   File::chdir: 0
@@ -70,4 +70,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Group::Git
   license: http://dev.perl.org/licenses/
   repository: git://github.com/ivanwills/Group-Git.git
-version: v0.3.1
+version: v0.3.2
