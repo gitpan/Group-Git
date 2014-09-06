@@ -9,12 +9,11 @@ package Group::Git::Cmd::Branch;
 use Moose::Role;
 use version;
 use Carp;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 use Getopt::Alt;
 
-our $VERSION = version->new('0.3.2');
+our $VERSION = version->new('0.3.3');
 
 requires 'repos';
 requires 'verbose';
@@ -60,7 +59,7 @@ Group::Git::Cmd::Branch - Show all branches with optional grepping
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Branch version 0.3.2.
+This documentation refers to Group::Git::Cmd::Branch version 0.3.3.
 
 
 =head1 SYNOPSIS

@@ -10,16 +10,13 @@ use strict;
 use warnings;
 use version;
 use Getopt::Alt qw/get_options/;
-use Pod::Usage;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use FindBin qw/$Bin/;
 use Path::Class;
 use Group::Git;
 use Config::Any;
 use Term::ANSIColor qw/colored/;
 
-our $VERSION = version->new('0.3.2');
+our $VERSION = version->new('0.3.3');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 
 main();
@@ -67,7 +64,13 @@ sub main {
         conf => $conf,
     );
 
-    my $action = $cmd || ( warn "No command specified!\n" && pod2usage( -verbose => 1 ) );
+    if (!$cmd) {
+        require Pod::Usage;
+        warn "No command specified!\n";
+        Pod::Usage::pod2usage( -verbose => 1 );
+    }
+
+    my $action = $cmd;
     my $skip   = $opt->skip;
     my $match  = $opt->match;
     my %exclude = map { $_ => 1 } @{ $conf->{exclude} || [] };
@@ -77,6 +80,7 @@ sub main {
     if ($opt->page) {
         my $tmp;
         $outfh = $tmp if open $tmp, '|-', $ENV{PAGER} || 'less -Rx4SFX';
+        $group->paging(1);
     }
 
     my $cmd_start = do_cmd( $group, $action . '_start' );
@@ -165,7 +169,7 @@ group-git - Perform operations over many git repositories at once
 
 =head1 VERSION
 
-This documentation refers to group-git version 0.3.2.
+This documentation refers to group-git version 0.3.3.
 
 =head1 SYNOPSIS
 

@@ -9,19 +9,21 @@ package Group::Git::Cmd::Sh;
 use Moose::Role;
 use version;
 use Carp;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 use Getopt::Alt;
 
-our $VERSION = version->new('0.3.2');
+our $VERSION = version->new('0.3.3');
 
 requires 'repos';
 requires 'verbose';
 
 my $opt = Getopt::Alt->new(
     { help => __PACKAGE__, },
-    [ 'quote|q!', ]
+    [
+        'quote|q!',
+        'interactive|i',
+    ]
 );
 
 sub sh_start {
@@ -41,6 +43,10 @@ sub sh {
         = $opt->opt->quote
         ? join ' ', map { $self->shell_quote } @ARGV
         : join ' ', @ARGV;
+    if ($opt->opt->interactive) {
+        system $cmd;
+        return;
+    }
     my $out = `$cmd`;
 
     return $out if $self->verbose;
@@ -60,7 +66,7 @@ Group::Git::Cmd::Sh - Runs shell script in each git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Sh version 0.3.2.
+This documentation refers to Group::Git::Cmd::Sh version 0.3.3.
 
 =head1 SYNOPSIS
 
@@ -71,6 +77,10 @@ This documentation refers to Group::Git::Cmd::Sh version 0.3.2.
    -q --quote   Quote the program arguments before running saves you from
                 having to work out the next level quoting but stops you from
                 using other shell options eg piping (|).
+   -i --interactive
+                Stops capturing STDOUT so that interactive programs will
+                work as expected eg if program is bash this will let you
+                see the results of commands run
 
 =head1 DESCRIPTION
 
@@ -86,7 +96,7 @@ Runs all the reset of the command line in each directory as a shell script.
 
 =item C<sh_start ()>
 
-Process the command line arguments for watch
+Process the command line arguments for sh
 
 =back
 

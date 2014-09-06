@@ -9,14 +9,13 @@ package Group::Git::Stash;
 use Moose;
 use version;
 use Carp;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use IO::Prompt qw/prompt/;
 use JSON qw/decode_json/;
 use WWW::Mechanize;
 use Path::Class;
 
-our $VERSION = version->new('0.3.2');
+our $VERSION = version->new('0.3.3');
 
 extends 'Group::Git';
 
@@ -80,7 +79,7 @@ Group::Git::Stash - Adds reading all repositories you have access to on your loc
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Stash version 0.3.2.
+This documentation refers to Group::Git::Stash version 0.3.3.
 
 =head1 SYNOPSIS
 

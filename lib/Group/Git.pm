@@ -9,13 +9,12 @@ package Group::Git;
 use Moose;
 use version;
 use Carp;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use Path::Class;
 use File::chdir;
 use Group::Git::Repo;
 
-our $VERSION = version->new('0.3.2');
+our $VERSION = version->new('0.3.3');
 our $AUTOLOAD;
 
 has conf => (
@@ -45,6 +44,10 @@ has runs => (
     is      => 'rw',
     isa     => 'Int',
     default => 1,
+);
+has paging => (
+    is      => 'rw',
+    isa     => 'Bool',
 );
 
 # load all roles in the namespace Group::Git::Cmd::*
@@ -140,7 +143,7 @@ Group::Git - Base module for group of git repository operations.
 
 =head1 VERSION
 
-This documentation refers to Group::Git version 0.3.2.
+This documentation refers to Group::Git version 0.3.3.
 
 =head1 SYNOPSIS
 

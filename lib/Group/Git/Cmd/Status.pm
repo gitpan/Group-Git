@@ -9,20 +9,27 @@ package Group::Git::Cmd::Status;
 use Moose::Role;
 use version;
 use Carp;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use File::chdir;
 use Getopt::Alt;
 
-our $VERSION = version->new('0.3.2');
+our $VERSION = version->new('0.3.3');
 
 requires 'repos';
 requires 'verbose';
 
 my $opt = Getopt::Alt->new(
     { help => __PACKAGE__, },
-    [ 'quote|q!', ]
+    [
+        'quiet|q',
+    ]
 );
+
+sub status_start {
+    $opt->process;
+
+    return;
+}
 
 sub status {
     my ($self, $name) = @_;
@@ -53,7 +60,7 @@ Group::Git::Cmd::Status - Runs git status on a git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Status version 0.3.2.
+This documentation refers to Group::Git::Cmd::Status version 0.3.3.
 
 
 =head1 SYNOPSIS
@@ -79,6 +86,10 @@ Runs git status on each directory if the status message includes:
 
 The status is suppressed to keep the output clean. This can be overridden
 if verbose is set.
+
+=item C<status_start ()>
+
+Process the command line arguments for status
 
 =back
 
