@@ -1,30 +1,37 @@
-package Group::Git::Repo;
+package Group::Git::Cmd::List;
 
-# Created on: 2013-05-05 19:07:36
+# Created on: 2013-05-06 21:57:07
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use Moose;
+use Moose::Role;
 use version;
+use Carp;
+use English qw/ -no_match_vars /;
+use File::chdir;
+use Getopt::Alt;
 
 our $VERSION = version->new('0.3.4');
 
-extends 'Group::Git';
+requires 'repos';
+requires 'verbose';
 
-has name => (
-    is  => 'rw',
-    isa => 'Path::Class::Dir',
+my $opt = Getopt::Alt->new(
+    { help => __PACKAGE__, },
+    [
+        'quiet|q',
+    ]
 );
-has url => (
-    is  => 'rw',
-    isa => 'Str',
-);
-has git => (
-    is  => 'rw',
-    isa => 'Str',
-);
+
+sub list {
+    my ($self, $name) = @_;
+    return unless -d $name;
+    warn "$name\n";
+
+    return ' ';
+}
 
 1;
 
@@ -32,30 +39,33 @@ __END__
 
 =head1 NAME
 
-Group::Git::Repo - Git repository details object.
+Group::Git::Cmd::List - Runs git status on a git project
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Repo version 0.3.4.
+This documentation refers to Group::Git::Cmd::List version 0.3.4.
 
 
 =head1 SYNOPSIS
 
-   use Group::Git::Repo;
+   use Group::Git::Cmd::List;
 
-   # create a new repository object
-   my $ggr = Group::Git::Repo->new(
-       name => 'some-repo',
-       url  => 'http://example.com/some-repo/',
-       git  => 'git@example.com/some-repo.git',
-   );
+   # Brief but working code example(s) here showing the most common usage(s)
+   # This section will be as far as many users bother reading, so make it as
+   # educational and exemplary as possible.
+
 
 =head1 DESCRIPTION
 
-C<Group::Git::Repo> stores the basic information about a git repository for
-other L<Group::Git> modules to use. It does nothing by it's self.
-
 =head1 SUBROUTINES/METHODS
+
+=over 4
+
+=item C<list ($name)>
+
+Just prints C<$name> to STDERR if such a directory exists.
+
+=back
 
 =head1 DIAGNOSTICS
 
