@@ -13,15 +13,21 @@ use English qw/ -no_match_vars /;
 use File::chdir;
 use Getopt::Alt;
 
-our $VERSION = version->new('0.3.4');
+our $VERSION = version->new('0.4.0');
 
 requires 'repos';
 requires 'verbose';
 
 my $opt = Getopt::Alt->new(
     { help => __PACKAGE__, },
-    [ 'quote|q!', ]
+    [ 'quiet|q!', ]
 );
+
+sub update_start { shift->pull_start($_[0], 'update') }
+sub pull_start {
+    $opt->process;
+    return;
+}
 
 sub update { shift->pull($_[0], 'update') }
 sub pull {
@@ -45,7 +51,13 @@ sub pull {
 
     local $CWD = $dir if $dir;
     warn "$cmd\n" if $self->verbose > 1;
-    return `$cmd 2>&1`;
+    return `$cmd 2>&1` if !$opt->opt->quiet;
+
+    my @ans = `$cmd 2>&1`;
+
+    return if @ans == 1 && $ans[0] =~ /^Already \s up-to-date[.]$/xms;
+
+    return wantarray ? @ans : join '', @ans;
 }
 
 1;
@@ -58,7 +70,7 @@ Group::Git::Cmd::Pull - Pull latest version of all repositories or clone any tha
 
 =head1 VERSION
 
-This documentation refers to Group::Git::Cmd::Pull version 0.3.4.
+This documentation refers to Group::Git::Cmd::Pull version 0.4.0.
 
 
 =head1 SYNOPSIS
@@ -85,6 +97,14 @@ will clone that repository.
 
 Runs git update on all repositories, if a repository doesn't exist on disk this
 will clone that repository.
+
+=item C<pull_start ()>
+
+Pre-process pull options
+
+=item C<update_start ()>
+
+Pre-process update options
 
 =back
 

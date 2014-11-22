@@ -11,6 +11,7 @@ WriteMakefile
                    'Getopt::Alt' => '0.001001',
                    'IO::Prompt' => 0,
                    'JSON' => 0,
+                   'List::MoreUtils' => 0,
                    'Moose' => 0,
                    'Moose::Role' => 0,
                    'Net::GitHub' => '0.57',
