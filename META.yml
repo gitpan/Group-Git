@@ -3,75 +3,75 @@ abstract: 'Base module for group of git repository operations.'
 author:
   - 'Ivan Wills <ivan.wills@gmail.com>'
 build_requires:
-  Test::More: 0
-  Test::NoWarnings: 0
+  Test::More: '0'
+  Test::NoWarnings: '0'
 configure_requires:
-  Module::Build: 0.38
+  Module::Build: '0.38'
 dynamic_config: 1
-generated_by: 'Module::Build version 0.4204, CPAN::Meta::Converter version 2.133380'
+generated_by: 'Module::Build version 0.421, CPAN::Meta::Converter version 2.143240'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: Group-Git
 provides:
   Group::Git:
     file: lib/Group/Git.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Bitbucket:
     file: lib/Group/Git/Bitbucket.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::Branch:
     file: lib/Group/Git/Cmd/Branch.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::Help:
     file: lib/Group/Git/Cmd/Help.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::List:
     file: lib/Group/Git/Cmd/List.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::Pull:
     file: lib/Group/Git/Cmd/Pull.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::Sh:
     file: lib/Group/Git/Cmd/Sh.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::Status:
     file: lib/Group/Git/Cmd/Status.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Cmd::Watch:
     file: lib/Group/Git/Cmd/Watch.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Github:
     file: lib/Group/Git/Github.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Gitosis:
     file: lib/Group/Git/Gitosis.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Repo:
     file: lib/Group/Git/Repo.pm
-    version: v0.4.0
+    version: v0.4.1
   Group::Git::Stash:
     file: lib/Group/Git/Stash.pm
-    version: v0.4.0
+    version: v0.4.1
 requires:
-  Config::Any: 0
-  File::chdir: 0
-  Getopt::Alt: 0.001001
-  IO::Prompt: 0
-  JSON: 0
-  List::MoreUtils: 0
-  Moose: 0
-  Moose::Role: 0
-  Net::GitHub: 0.57
-  Path::Class: 0
-  Term::ANSIColor: 0
-  WWW::Mechanize: 0
-  YAML::Syck: 0
-  perl: 5.006
-  version: 0
+  Config::Any: '0'
+  File::chdir: '0'
+  Getopt::Alt: '0.002003'
+  IO::Prompt: '0'
+  JSON: '0'
+  List::MoreUtils: '0'
+  Moose: '0'
+  Moose::Role: '0'
+  Net::GitHub: '0.57'
+  Path::Class: '0'
+  Term::ANSIColor: '0'
+  WWW::Mechanize: '0'
+  YAML::Syck: '0'
+  perl: '5.006'
+  version: '0'
 resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Group::Git
   license: http://dev.perl.org/licenses/
   repository: git://github.com/ivanwills/Group-Git.git
-version: v0.4.0
+version: v0.4.1

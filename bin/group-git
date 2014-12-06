@@ -17,7 +17,7 @@ use Group::Git;
 use Config::Any;
 use Term::ANSIColor qw/colored/;
 
-our $VERSION = version->new('0.4.0');
+our $VERSION = version->new('0.4.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 
 main();
@@ -25,12 +25,26 @@ exit 0;
 
 sub main {
 
+
+    # do stuff here
+    my $conf = Config::Any->load_stems({
+        stems   => [ qw/group group-git/ ],
+        use_ext => 1,
+    });
+    $conf = {
+        map { %$_        }
+        map { values %$_ }
+        @{$conf}
+    };
+
     my ($opt, $cmd) = get_options(
         {
             sub_command   => 1,
             auto_complete => \&auto,
+            conf_prefix   => '',
             default       => {
                 page => 1,
+                %{ $conf },
             }
         },
         [
@@ -45,17 +59,6 @@ sub main {
             'quiet|q',
         ]
     );
-
-    # do stuff here
-    my $conf = Config::Any->load_stems({
-        stems   => [ qw/group group-git/ ],
-        use_ext => 1,
-    });
-    $conf = {
-        map { %$_        }
-        map { values %$_ }
-        @{$conf}
-    };
 
     my $module = $conf->{type} && !$opt->local ? 'Group::Git::' . ucfirst $conf->{type} : 'Group::Git';
     my $file   = "$module.pm";
@@ -227,7 +230,7 @@ group-git - Perform operations over many git repositories at once
 
 =head1 VERSION
 
-This documentation refers to group-git version 0.4.0.
+This documentation refers to group-git version 0.4.1.
 
 =head1 SYNOPSIS
 
@@ -264,14 +267,19 @@ This documentation refers to group-git version 0.4.0.
      --man      Prints the full documentation for group-git
 
   eg
+   # run "git log -n 1" in each repository
    group-git log -- -n 1
-   group-git --local status
-   group-git --verbose grep 'where is it'
+   # run "git pull" for only repositories tagged with "perl"
    group-git --tag perl pull
+   # run "git grep 'where is it'" for each repository showing the repository even if nothing found
+   group-git --verbose grep 'where is it'
+   # run "git status" with out trying to get new repositories (configured in .group-git.yml)
+   group-git --local status
 
 =head1 DESCRIPTION
 
-Run any git command over all repositories in the current directory.
+Run any git command over all repositories in the current directory or sub
+directories if C<--recurse> is used.
 
 =head2 Configuration
 
@@ -324,6 +332,11 @@ clone any repository that are not currently checked out in the current directory
  #  myothertag:
  #    - project2
  #    - project3
+
+ # Aliases of commands can be made using the aliases element in a similar
+ # fashon to git's own aliases functionality
+ #aliases:
+ #  log: log --oneline
 
 For Github and Bitbucket if username or password are missing you will be
 prompted to enter the details.
